@@ -1,6 +1,7 @@
 package com.coolweather.android;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -28,9 +29,6 @@ import java.util.List;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
-/**
- * Created by Administrator on 2017/12/2.
- */
 
     public class ChooseAreaFragment extends Fragment {
 
@@ -94,9 +92,16 @@ import okhttp3.Response;
                 } else if (currentLevel == LEVEL_CITY) {
                     selectedCity = cityList.get(position);
                     queryCounties();
+                } else if (currentLevel == LEVEL_COUNTY) {
+                    String weatherId = countyList.get(position).getWeatherId();
+                        Intent intent = new Intent(getActivity(), WeatherActivity.class);
+                        intent.putExtra("weather_id", weatherId);
+                        startActivity(intent);
+                        getActivity().finish();
                 }
-                }
+            }
         });
+
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,6 +114,7 @@ import okhttp3.Response;
         });
         queryProvinces();
     }
+
     private void queryProvinces() {
         titleText.setText("中国");
         backButton.setVisibility(View.GONE);
@@ -146,6 +152,7 @@ import okhttp3.Response;
         }
     }
 
+
     private void queryCounties() {
         titleText.setText(selectedCity.getCityName());
         backButton.setVisibility(View.VISIBLE);
@@ -165,6 +172,7 @@ import okhttp3.Response;
             queryFromServer(address, "county");
         }
     }
+
 
 
     private void queryFromServer(String address, final String type) {
@@ -199,6 +207,7 @@ import okhttp3.Response;
             }
             @Override
             public void onFailure(Call call, IOException e) {
+                // 通过runOnUiThread()方法回到主线程处理逻辑
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
