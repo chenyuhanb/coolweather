@@ -32,7 +32,6 @@ import okhttp3.Response;
 
     public class ChooseAreaFragment extends Fragment {
 
-
         public static final int LEVEL_PROVINCE = 0;
 
         public static final int LEVEL_CITY = 1;
@@ -51,20 +50,15 @@ import okhttp3.Response;
 
         private List<String> dataList = new ArrayList<>();
 
-
         private List<Province> provinceList;
 
         private List<City> cityList;
 
-
         private List<County> countyList;
-
 
         private Province selectedProvince;
 
-
         private City selectedCity;
-
 
         private int currentLevel;
 
@@ -94,10 +88,18 @@ import okhttp3.Response;
                     queryCounties();
                 } else if (currentLevel == LEVEL_COUNTY) {
                     String weatherId = countyList.get(position).getWeatherId();
+                    if (getActivity() instanceof  MainActivity) {
                         Intent intent = new Intent(getActivity(), WeatherActivity.class);
                         intent.putExtra("weather_id", weatherId);
                         startActivity(intent);
                         getActivity().finish();
+                    }else if (getActivity() instanceof  WeatherActivity){
+                        WeatherActivity activity = (WeatherActivity) getActivity();
+                        activity.drawerLayout.closeDrawers();
+                        activity.swipeRefresh.setRefreshing(true);
+                        activity.requestWeather(weatherId);
+                        activity.requestWeather(weatherId);
+                    }
                 }
             }
         });
