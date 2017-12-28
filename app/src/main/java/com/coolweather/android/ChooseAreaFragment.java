@@ -98,7 +98,6 @@ import okhttp3.Response;
                         activity.drawerLayout.closeDrawers();
                         activity.swipeRefresh.setRefreshing(true);
                         activity.requestWeather(weatherId);
-                        activity.requestWeather(weatherId);
                     }
                 }
             }
